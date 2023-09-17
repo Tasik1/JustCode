@@ -6,7 +6,12 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello World!")
+	arr := intSlice{5, 1, 3, 9, 6, 2, 7, -10, 0, 35, 46, -5, -4926, 5621, 76}
+	fmt.Println("Unsorted array:", arr)
+
+	arr.quickSort(arr, 0, len(arr)-1)
+
+	fmt.Println("Sorted array:", arr)
 }
 
 // 1. https://leetcode.com/problems/two-sum/
@@ -42,7 +47,7 @@ func longestCommonPrefix(strs []string) string {
 // 3. Написать функцию для сравнения слайса с цело-числовыми значениями
 // a) сравнивает два слайса
 // b) возвращает булево значение: совпало или нет
-// c) порядок не важен:
+// c) порядок важен:
 // Time Complexity: O(n)
 // Space Complexity: O(1)
 func isArrayEquals(arr1 []int, arr2 []int) bool {
@@ -57,7 +62,7 @@ func isArrayEquals(arr1 []int, arr2 []int) bool {
 	return true
 }
 
-// d) если порядок важен:
+// d) если порядок не важен:
 // Time Complexity: O(n)
 // Space Complexity: O(n)
 func isSlicesEquals2(arr1 []int, arr2 []int) bool {
@@ -78,4 +83,36 @@ func isSlicesEquals2(arr1 []int, arr2 []int) bool {
 	}
 
 	return true
+}
+
+// 4. Реализовать структуру с функцией для сортировки элементов слайса целых чисел
+// Time Complexity: Average Case: O(n log n)
+// Space Complexity: O(log n)
+type intSlice []int
+
+func (is intSlice) quickSort(arr []int, low, high int) {
+	if low < high {
+		pi := partition(arr, low, high)
+		is.quickSort(arr, low, pi-1)
+		is.quickSort(arr, pi, high)
+	}
+}
+
+func partition(arr []int, low, high int) int {
+	pivot := arr[low+(high-low)/2]
+
+	for low <= high {
+		for arr[low] < pivot {
+			low++
+		}
+		for arr[high] > pivot {
+			high--
+		}
+		if low <= high {
+			arr[low], arr[high] = arr[high], arr[low]
+			low++
+			high--
+		}
+	}
+	return low
 }
